@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   final List _toDoList = [];
   Map<String, dynamic> _lastRemove = {};
   int _lastRemovePos = 0;
+  final _itemFocus = FocusNode();
 
   void _addToDo() {
     setState(() {
@@ -42,6 +43,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   child: TextField(
+                    focusNode: _itemFocus,
                     controller: _toDoController,
                     decoration: const InputDecoration(
                       labelText: 'Adicionar item',
@@ -50,7 +52,11 @@ class _HomePageState extends State<HomePage> {
                 ),
                 IconButton(
                   onPressed: () {
-                    _addToDo();
+                    if (_toDoController.text.isNotEmpty) {
+                      _addToDo();
+                    } else {
+                      FocusScope.of(context).requestFocus(_itemFocus);
+                    }
                   },
                   icon: const Icon(
                     Icons.add_shopping_cart,
